@@ -57,3 +57,37 @@ COPY . .
 # 5. Definição do ponto de entrada do contêiner
 ENTRYPOINT ["./minha-aplicacao"]
 `
+### Dockerfile
+
+A document with a set of instructions to create a container image.
+
+#### Common Instructions
+- FROM <image>: Define the image base in which new layers will be added;
+- WORKDIR <path>: Define a working directory of the image where files will be copied
+and commands will be executed;
+- COPY <host-path> <image-path>: Copies the files from to host to the image working directory;
+- RUN <commands>: Run the specified command;
+- ENV <name> <value> Define environment variables;
+- EXPOSE <port>: Define which port the image would like to expose to the host
+- CMD ["<command>", "<arg1>"]: This is the command that will be executed on the container
+- ENTRYPOINT [<executable>, <params>]: Define an executable that will be run in the container
+
+### Docker Best Practices
+- Multistage build
+- Choose an appropriated image
+- Exclude unnecessary files with .dockerignore
+- Decouple application: Each container should have one concern
+- Order multi-line args
+
+### Docker Compose
+It's used to manage multiple containers, facilitates communication between them and
+storage persistance;
+
+- service: Define an abstract resource within an application;
+- network: Establish connection between containers inside services
+- volume: Allow the data persistance inside service
+
+### PID 1
+Represents the first process to be initialized at boot, it start and manages others
+processes. By default, PID 1 doesn't receive signals like SIGINT and SIGTERM;
+To avoid that, you should use tini to kill child processes;
