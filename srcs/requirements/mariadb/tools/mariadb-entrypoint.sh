@@ -2,8 +2,9 @@
 
 set -e
 
-DB_ROOT_PASSWORD=rootpassword123
-DB_PASSWORD=12345
+DB_ROOT_PASSWORD=$(cat /run/secrets/db_root_password.txt)
+DB_PASSWORD=$(cat /run/secrets/db_password.txt)
+DB_USER=$(cat /run/secrets/db_user.txt)
 
 DATADIR=/var/lib/mysql
 
@@ -14,7 +15,6 @@ if [ ! -d "$DATADIR/mysql" ]; then
 	TMP_FILE="/tmp/init_db.sql"
 
 	cat << EOF > $TMP_FILE
-
 FLUSH PRIVILEGES;
 
 ALTER USER 'root'@'localhost' IDENTIFIED BY '${DB_ROOT_PASSWORD}';

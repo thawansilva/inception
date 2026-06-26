@@ -9,6 +9,10 @@ services:
     networks:
       - inception_network
     restart: on-failure
+    secrets:
+      - db_user
+      - db_password
+      - db_root_password
 
       #  wordpress:
       #    container_name: wordpress
@@ -35,8 +39,19 @@ services:
       #      - wordpress
       #    restart: always
 
+secrets:
+  credentials:
+    file: ../secrets/credentials.txt
+  db_user:
+    file: ../secrets/db_user.txt
+  db_password:
+    file: ../secrets/db_password.txt
+  db_root_password:
+    file: ../secrets/db_root_password.txt
+
 volumes:
   wordpress_data:
+    driver: local
   mariadb_data:
     driver: local
 
