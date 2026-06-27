@@ -10,7 +10,6 @@ services:
       - inception_network
     restart: on-failure
     secrets:
-      - db_user
       - db_password
       - db_root_password
 
@@ -42,8 +41,6 @@ services:
 secrets:
   credentials:
     file: ../secrets/credentials.txt
-  db_user:
-    file: ../secrets/db_user.txt
   db_password:
     file: ../secrets/db_password.txt
   db_root_password:
