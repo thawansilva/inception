@@ -16,7 +16,7 @@ if [ ! -d "$DB_DATADIR/mysql" ]; then
 fi
 
 echo "Starting temporary MARIADB Instance"
-mysqld --skip-networking --user=mysql --socket=/run/mysqld/mysqld.sock & pid="$!"
+mariadbd --skip-networking --user=mysql --socket=/run/mysqld/mysqld.sock & pid="$!"
 
 echo "Waiting for MariaDB to be ready..."
 until mysqladmin --socket=/run/mysqld/mysqld.sock ping >/dev/null 2>&1; do
@@ -25,14 +25,14 @@ done
 echo "MariaDB is ready"
 
 echo "Setting up MariaDB"
-
-echo senha $DB_PASSWORD
-
-mysql --socket=/run/mysqld/mysqld.sock -u root << EOF
+mariadb --socket=/run/mysqld/mysqld.sock -u root << EOF
 FLUSH PRIVILEGES;
 
 ALTER USER 'root'@'localhost' IDENTIFIED BY '${DB_ROOT_PASSWORD}';
 CREATE DATABASE IF NOT EXISTS ${DB_NAME};
+
+CREATE USER IF NOT EXISTS '${DB_USER}'@'localhost' IDENTIFIED BY '${DB_PASSWORD}';
+GRANT ALL PRIVILEGES ON ${DB_NAME}.* TO '${DB_USER}'@'localhost';
 
 CREATE USER IF NOT EXISTS '${DB_USER}'@'%' IDENTIFIED BY '${DB_PASSWORD}';
 GRANT ALL PRIVILEGES ON ${DB_NAME}.* TO '${DB_USER}'@'%';
@@ -40,10 +40,10 @@ FLUSH PRIVILEGES;
 EOF
 
 echo "Shutting down temporary MariaDB..."
-mysqladmin --socket=/run/mysqld/mysqld.sock -u root -p"${DB_ROOT_PASSWORD}" shutdown
+mariadb-admin --socket=/run/mysqld/mysqld.sock -u root -p"${DB_ROOT_PASSWORD}" shutdown
 
 # Wait for shutdown
 wait "$pid" || true
 
 echo "MariaDB configuration completed. Starting MariaDB..."
-exec mysqld --user=mysql --datadir=/var/lib/mysql --socket=/run/mysqld/mysqld.sock
+exec mariadbd --user=mysql --datadir=/var/lib/mysql --socket=/run/mysqld/mysqld.sock
