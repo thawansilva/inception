@@ -8,14 +8,15 @@ LABEL org.opencontainers.image.title="Inception - MariaDB" \
 RUN apk update \
 	&& apk add --no-cache mariadb mariadb-client tini gettext-envsubst
 
-RUN mkdir -p /var/run/mysqld /var/lib/mysql /var/log/mysql \
-	&& chown -R mysql:mysql /var/run/mysqld /var/lib/mysql /var/log/mysql
-
+RUN mkdir -p /var/run/mysqld \
+	&& chown -R mysql:mysql /var/run/mysqld \
+	&& chmod 755 /var/run/mysqld
 
 COPY ./conf/mariadb.conf /etc/mariadb-server.cnf.template
-COPY ./tools/mariadb-entrypoint.sh /usr/local/bin/
-RUN chmod +x /usr/local/bin/mariadb-entrypoint.sh
+COPY ./tools/init_db.sh /usr/local/bin/
+
+RUN chmod +x /usr/local/bin/init_db.sh
 
 EXPOSE 3306
 
-ENTRYPOINT ["/sbin/tini", "--", "/usr/local/bin/mariadb-entrypoint.sh"]
+ENTRYPOINT ["/sbin/tini", "--", "/usr/local/bin/init_db.sh"]
