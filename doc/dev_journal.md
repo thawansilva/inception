@@ -8,7 +8,7 @@ I asked help for Claude to plan a roadmap of what should I do to develop the pro
 as it has many services to implement.
 
 ## [2026-06-19] - Studying Docker
-So Docker is a plataform that allows to separate the infrastructure from the application itself;
+So Docker is a platform that allows to separate the infrastructure from the application itself;
 It came to solve the problem of "It works on my machine" through containers that is 
 an isolated environment on which you application is running.
 It also facilitates deployment workflow and testing environment;
@@ -91,3 +91,28 @@ storage persistance;
 Represents the first process to be initialized at boot, it start and manages others
 processes. By default, PID 1 doesn't receive signals like SIGINT and SIGTERM;
 To avoid that, you should use tini to kill child processes;
+
+## Wordpress
+It's a content management system (CMS) that can be used to manage and create websites without knowing programming.
+
+There two versions of the platform:
+
+- It can be installed in a server and managed;
+- It can be used as comercial service that hosts the website for you
+
+### PHP - FPM (FastCGI Process Management)
+It's a PHP implementation focused on deliver high-traffic sites with efficiency and isolation.
+
+It runs separate processes and create more workers depending on the traffic
+
+## NGINX (Engine X)
+It's a webserver, reverse proxy, load balancer, content cache, TCP/UDP proxy server, mail proxy server.
+
+It's known by it's high concurrency, low memory usage and performance
+
+NGINX has a main process and several workers processes. The main process read and evaluate 
+the configuration and manage the workers. The workers processes do the actual processing of requests.
+
+NGINX works on an event-based model and uses SO mechanisms to distribute requests between workers.
+
+
