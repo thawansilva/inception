@@ -9,6 +9,17 @@ WP_ADMIN_PASSWORD=$(cat /run/secrets/wp_admin_password)
 envsubst '$WP_PORT' < /etc/php82/php.fpm.d/www.conf.template > /etc/php82/php-fpm.d/www.conf
 
 WP_PATH=/var/www/html
+HASH_CONFIG=$(printf '%s' "$DB_NAME" "$DB_USER" "$DB_PASSWORD" "$WP_USER" "$WP_PASSWORD" \
+	"$WP_ADMIN_USER" "$WP_ADMIN_PASSWORD" "$WP_PORT" "$DOMAIN_NAME" | sha256sum | \
+	cut -d ' ' -f1
+)
+
+apply_wp_config () {
+	wp config set DB_NAME "$DB_NAME" --allow-root
+	wp config set DB_USER "$DB_USER" --allow-root
+	wp config set DB_PASSWORD "$DB_PASSWORD" --allow-root
+	wp config set DB_HOST "mariadb:$DB_PORT" --allow-root
+}
 
 echo "Checking MariaDB connection..."
 while ! nc -z mariadb ${DB_PORT}; do
@@ -17,6 +28,8 @@ while ! nc -z mariadb ${DB_PORT}; do
 done
 
 echo "Setting up Wordpress"
+
+HASH_FILE=/var/www/html/.config_hash
 
 if [ ! -f $WP_PATH/wp-config.php ]; then
 	echo "Downloading Wordpress..."
@@ -48,10 +61,25 @@ if [ ! -f $WP_PATH/wp-config.php ]; then
 		--user_pass=$WP_PASSWORD \
 		--allow-root
 
-	chown -R www-data:www-data /var/www/html
+	apply_wp_config
+
+	chown -R nobody:nobody /var/www/html
+	echo $HASH_CONFIG > $HASH_FILE
+
 	echo "WordPress service initialization completed successfully."
 else
+	STORED_HASH=""
+	[ -f $HASH_FILE ] && STORED_HASH=$(cat $HASH_FILE)
+
+	if [ $HASH_CONFIG != $STORED_HASH ]; then
+		apply_wp_config
+		echo $HASH_CONFIG > $HASH_FILE
+	fi
+
 	echo "Wordpress already initialized"
+	chown -R nobody:nobody /var/www/html
+	mkdir -p /var/www/html/wp-content/uploads
+	chmod -R 775 /var/www/html/wp-content/uploads
 fi
 
-exec "$@"
+exec php-fpm82 -F

@@ -13,30 +13,33 @@ services:
       - db_password
       - db_root_password
 
-      #  wordpress:
-      #    container_name: wordpress
-      #    image: wordpress:inception
-      #    build: ./requirements/wordpress
-      #    env_file: .env
-      #    networks:
-      #      - inception_network
-      #    depends_on:
-      #      mariadb:
-      #        condition: service_healthy
-      #    restart: always
-      #
-      #  nginx:
-      #    container_name: nginx_container
-      #    image: nginx:inception
-      #    build: ./requirements/nginx
-      #    port:
-      #      - "${WEB_PORT}:${WEB_PORT}"
-      #    networks:
-      #      - inception_network
-      #    env_file: .env
-      #    depends_on:
-      #      - wordpress
-      #    restart: always
+  wordpress:
+    container_name: wordpress
+    image: wordpress:inception
+    build: ./requirements/wordpress
+    env_file: .env
+    networks:
+      - inception_network
+    depends_on:
+      - mariadb
+    restart: on-failure
+    secrets:
+      - db_password
+      - wp_password
+      - wp_admin_password
+    #
+    #  nginx:
+    #    container_name: nginx_container
+    #    image: nginx:inception
+    #    build: ./requirements/nginx
+    #    port:
+    #      - "${WEB_PORT}:${WEB_PORT}"
+    #    networks:
+    #      - inception_network
+    #    env_file: .env
+    #    depends_on:
+    #      - wordpress
+    #    restart: always
 
 secrets:
   credentials:
@@ -45,6 +48,10 @@ secrets:
     file: ../secrets/db_password.txt
   db_root_password:
     file: ../secrets/db_root_password.txt
+  wp_password:
+    file: ../secrets/wp_password.txt
+  wp_admin_password:
+    file: ../secrets/wp_admin_password.txt
 
 volumes:
   wordpress_data:
