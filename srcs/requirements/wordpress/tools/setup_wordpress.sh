@@ -9,6 +9,8 @@ WP_ADMIN_PASSWORD=$(cat /run/secrets/wp_admin_password)
 envsubst '$WP_PORT' < /etc/php83/php.fpm.d/www.conf.template > /etc/php83/php-fpm.d/www.conf
 
 WP_PATH=/var/www/html
+HASH_FILE=$WP_PATH/.config_hash
+
 HASH_CONFIG=$(printf '%s' "$DB_NAME" "$DB_USER" "$DB_PASSWORD" "$WP_USER" "$WP_PASSWORD" \
 	"$WP_ADMIN_USER" "$WP_ADMIN_PASSWORD" "$WP_PORT" "$DOMAIN_NAME" | sha256sum | \
 	cut -d ' ' -f1
@@ -29,7 +31,6 @@ done
 
 echo "Setting up Wordpress"
 
-HASH_FILE=/var/www/html/.config_hash
 
 if [ ! -f $WP_PATH/wp-config.php ]; then
 	echo "Downloading Wordpress..."
