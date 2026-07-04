@@ -6,7 +6,7 @@ DB_PASSWORD=$(cat /run/secrets/db_password)
 WP_PASSWORD=$(cat /run/secrets/wp_password)
 WP_ADMIN_PASSWORD=$(cat /run/secrets/wp_admin_password)
 
-envsubst '$WP_PORT' < /etc/php82/php.fpm.d/www.conf.template > /etc/php82/php-fpm.d/www.conf
+envsubst '$WP_PORT' < /etc/php83/php.fpm.d/www.conf.template > /etc/php83/php-fpm.d/www.conf
 
 WP_PATH=/var/www/html
 HASH_CONFIG=$(printf '%s' "$DB_NAME" "$DB_USER" "$DB_PASSWORD" "$WP_USER" "$WP_PASSWORD" \
@@ -82,4 +82,4 @@ else
 	chmod -R 775 /var/www/html/wp-content/uploads
 fi
 
-exec php-fpm82 -F
+exec php-fpm83 -F
