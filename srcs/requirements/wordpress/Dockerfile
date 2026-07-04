@@ -1,12 +1,11 @@
-FROM alpine:3.23
+FROM alpine:3.22
 
 LABEL org.opencontainers.image.title="Inception - WordPress + PHP-FPM" \
 	org.opencontainers.image.description="Implement Wordpress + PHP-FPM application for the Inception project" \
 	org.opencontainers.image.authors="thaperei@student.42sp.org.br" \
 	org.opencontainers.image.source="https://github.com/thawansilva/inception"
 
-RUN apk update \
-	&& apk add --no-cache \
+RUN apk update && apk add --no-cache \
 	php82 \
 	php82-fpm \
 	php82-mysqli \
@@ -17,11 +16,13 @@ RUN apk update \
 	php82-xml \
 	php82-phar \
 	php82-iconv \
+	php82-tokenizer \
 	mariadb-client \
 	curl \
 	gettext-envsubst \
-	tini \
-	&& ln -s /usr/bin/php82 /usr/bin/php \
+	tini && ln -s /usr/bin/php82 /usr/bin/php
+
+RUN echo "memory_limit=512M" > /etc/php82/conf.d/memory_limit.ini
 
 RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar \
 	&& chmod +x wp-cli.phar \
