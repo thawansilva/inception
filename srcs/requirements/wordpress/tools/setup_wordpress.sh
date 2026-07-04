@@ -30,7 +30,7 @@ if [ ! -f $WP_PATH/wp-config.php ]; then
 		--dbhost=mariadb:$DB_PORT \
 		--allow-root
 
-	echo "Configuring Database connection parameters..."
+	echo "Executing WordPress core installation..."
 	wp core install \
 		--url="https://$DOMAIN_NAME" \
 		--title=$WP_TITLE \
@@ -40,7 +40,7 @@ if [ ! -f $WP_PATH/wp-config.php ]; then
 		--skip-email \
 		--allow-root
 
-	echo "Creating user..."
+	echo "Creating secondary user..."
 	wp user create \
 		$WP_USER \
 		"$WP_USER@42.fr" \
