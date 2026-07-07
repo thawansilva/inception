@@ -28,3 +28,4 @@ nginx -t
 echo "Nginx configuration test passed"
 
 echo "Starting Nginx..."
+exec nginx -g "daemon off;"

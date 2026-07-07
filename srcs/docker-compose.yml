@@ -17,6 +17,8 @@ services:
     container_name: wordpress
     image: wordpress:inception
     build: ./requirements/wordpress
+    volumes:
+      - wordpress_data:/var/www/html
     env_file: .env
     networks:
       - inception_network
@@ -27,19 +29,21 @@ services:
       - db_password
       - wp_password
       - wp_admin_password
-    #
-    #  nginx:
-    #    container_name: nginx_container
-    #    image: nginx:inception
-    #    build: ./requirements/nginx
-    #    port:
-    #      - "${WEB_PORT}:${WEB_PORT}"
-    #    networks:
-    #      - inception_network
-    #    env_file: .env
-    #    depends_on:
-    #      - wordpress
-    #    restart: always
+
+  nginx:
+    container_name: nginx
+    image: nginx:inception
+    build: ./requirements/nginx
+    volumes:
+      - wordpress_data:/var/www/html
+    ports:
+      - "${WEB_PORT}:${WEB_PORT}"
+    networks:
+      - inception_network
+    env_file: .env
+    depends_on:
+      - wordpress
+    restart: on-failure
 
 secrets:
   credentials:
