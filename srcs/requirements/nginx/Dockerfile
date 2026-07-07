@@ -9,7 +9,7 @@ RUN apk update && apk add --no-cache nginx openssl tini gettext-envsubst
 
 RUN mkdir -p /etc/nginx/ssl
 
-COPY ./conf/nginx.conf /etc/nginx/nginx.conf
+COPY ./conf/nginx.conf /etc/nginx/ssl/nginx.conf.template
 COPY ./tool/setup_nginx.sh /usr/local/bin/
 
 RUN chmod +x /usr/local/bin/setup_nginx.sh
