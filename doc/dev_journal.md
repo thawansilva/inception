@@ -115,4 +115,34 @@ the configuration and manage the workers. The workers processes do the actual pr
 
 NGINX works on an event-based model and uses SO mechanisms to distribute requests between workers.
 
+### Generate SSL/TLS Certification
+It's a encrypted certification to guarantee a safe and realiable connection 
+for sending sensitive data between application.
+
+In the case, I am going to use OpenSSL which is a toolkit of encryptation.
+There are some flags that we use to generate it: 
+`-x509`: it define the type of certificate that will be generated;
+`-newkey rsa:4096`: it create a new private key that will use a rsa encrytion and 4096 bits;
+`-keyout`: it define the output of the private key;
+`-out`: it define the output of the certificate;
+`-sha256`: it define that the algorithm of encryption is sha256;
+`-days`: it define the time of expiration of the certificate;
+`-subj`: it define additional informations to the certificate like the country, state and etcetera
+
+__* For safety reasons you should use chmod to restrict the access of private key to the owner, and allow read-only permission for the certificate to other groups *
+
+### Configuration Context
+
+```bash
+main                    # Define worker processes, linux user, PID, log file location
+├── events              # Assign the number of connections for each worker
+├── http                # Determine how http/https connections are handled
+├   ├── server          # Process a http request
+├   ├     └── location  # Defines how to process a http request based on the uri specified
+├   └── upstream        # Defines a group of backend applications used for load balancing
+└── streams             # Defines how to handle with layer 3 and 4 (TCP/UDP)
+    ├── server
+    ├    └── location
+    └── upstream
+```
 
