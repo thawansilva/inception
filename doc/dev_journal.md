@@ -150,3 +150,8 @@ It can be accessed by a prefix string or regex(~ for case-insensite or ~* for ca
 It looks for the longest matching string and remember it, then checks for the regex.
 If no regex match is found, it uses the previous string stored, otherwise,
 it uses the corresponding configuration.
+
+#### server_name
+It defines the name of the virtual server.
+The first name is the primary server name
+
