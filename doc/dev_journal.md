@@ -145,4 +145,8 @@ main                    # Define worker processes, linux user, PID, log file loc
     ├    └── location
     └── upstream
 ```
-
+#### location
+It can be accessed by a prefix string or regex(~ for case-insensite or ~* for case-sensitive).
+It looks for the longest matching string and remember it, then checks for the regex.
+If no regex match is found, it uses the previous string stored, otherwise,
+it uses the corresponding configuration.
