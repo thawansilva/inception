@@ -3,8 +3,6 @@ set -e
 
 envsubst '$WEB_PORT $DOMAIN_NAME $WP_PORT' < /etc/nginx/nginx.conf.template > /etc/nginx/nginx.conf
 
-: "${DOMAIN_NAME:=localhost}"
-
 if [ ! -f /etc/nginx/ssl/nginx.crt ]; then
 	echo "Generating self-signed SSL certificate for $DOMAIN_NAME"
 	openssl req -x509 \
