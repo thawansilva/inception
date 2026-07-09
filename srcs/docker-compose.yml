@@ -75,6 +75,27 @@ services:
       REDIS_PORT: ${REDIS_PORT}
     restart: on-failure
 
+  ftp:
+    container_name: ftp_container
+    image: ftp:inception
+    build: ./requirements/bonus/ftp
+    volumes:
+      - wordpress_data:/var/www/html
+    networks:
+      - inception_network
+    secrets:
+      - ftp_password
+    ports:
+      - "${FTP_PORT}:${FTP_PORT}"
+      - "${FTP_PASV_MIN_PORT}:${FTP_PASV_MIN_PORT}"
+      - "${FTP_PASV_MAX_PORT}:${FTP_PASV_MAX_PORT}"
+    environment:
+      FTP_USER: ${FTP_USER}
+      FTP_PORT: ${FTP_PORT}
+      FTP_PASV_MIN_PORT: ${FTP_PASV_MIN_PORT}
+      FTP_PASV_MAX_PORT: ${FTP_PASV_MAX_PORT}
+    restart: on-failure
+
 secrets:
   credentials:
     file: ../secrets/credentials.txt
@@ -86,6 +107,8 @@ secrets:
     file: ../secrets/wp_password.txt
   wp_admin_password:
     file: ../secrets/wp_admin_password.txt
+  ftp_password:
+    file: ../secrets/ftp_password.txt
 
 volumes:
   wordpress_data:

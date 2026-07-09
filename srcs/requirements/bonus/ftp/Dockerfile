@@ -1,0 +1,19 @@
+FROM alpine:3.23
+
+LABEL org.opencontainers.image.title="Inception - FTP" \
+	org.opencontainers.image.description="FTP implementation for the Inception project" \
+	org.opencontainers.image.authors="thaperei@student.42sp.org.br" \
+	org.opencontainers.image.source="https://github.com/thawansilva/inception"
+
+RUN apk update \
+	&& apk add --no-cache vsftpd lftp tini gettext-envsubst
+
+COPY ./conf/vsftpd.conf /etc/vsftpd/vsftpd.conf.template
+COPY ./tools/setup_ftp.sh /usr/local/bin/
+
+RUN chmod +x /usr/local/bin/setup_ftp.sh
+RUN mkdir -p /var/run/vsftp/empty
+
+EXPOSE 21 30000-30009
+
+CMD ["/sbin/tini", "--", "/usr/local/bin/setup_ftp.sh"]
