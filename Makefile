@@ -1,8 +1,15 @@
+-include ./srcs/.env
+
+export
+
 COMPOSE_FILE=srcs/docker-compose.yml
 
 all: up
 
-up:
+volumes:
+	mkdir -p $(VOLUME_MARIADB) $(VOLUME_WORDPRESS) $(VOLUME_REDIS)
+
+up: volumes
 	docker compose -f $(COMPOSE_FILE) up -d
 
 down:
@@ -13,6 +20,7 @@ clean: down
 
 fclean: clean
 	docker image prune -a -f
+	sudo rm -fr $(VOLUME_MARIADB) $(VOLUME_WORDPRESS) $(VOLUME_REDIS)
 
 re: fclean all
 
