@@ -13,19 +13,10 @@ if [ ! -d "$DB_DATADIR/mysql" ]; then
 	echo "Initializing MariaDB configuration"
 
 	mariadb-install-db --user=mysql --datadir="$DB_DATADIR" > /dev/null
-fi
 
-echo "Starting temporary MARIADB Instance"
-mariadbd --skip-networking --user=mysql --socket=/run/mysqld/mysqld.sock & pid="$!"
+	echo "Setting up MariaDB"
+	cat << EOF > /tmp/init.sql
 
-echo "Waiting for MariaDB to be ready..."
-until mysqladmin --socket=/run/mysqld/mysqld.sock ping >/dev/null 2>&1; do
-	sleep 1
-done
-echo "MariaDB is ready"
-
-echo "Setting up MariaDB"
-mariadb --socket=/run/mysqld/mysqld.sock -u root << EOF
 FLUSH PRIVILEGES;
 
 ALTER USER 'root'@'localhost' IDENTIFIED BY '${DB_ROOT_PASSWORD}';
@@ -39,11 +30,15 @@ GRANT ALL PRIVILEGES ON ${DB_NAME}.* TO '${DB_USER}'@'%';
 FLUSH PRIVILEGES;
 EOF
 
-echo "Shutting down temporary MariaDB..."
-mariadb-admin --socket=/run/mysqld/mysqld.sock -u root -p"${DB_ROOT_PASSWORD}" shutdown
+	echo "Executing bootstrap configuration..."
+	mariadbd -u mysql --datadir="$DB_DATADIR" --bootstrap < /tmp/init.sql
 
-# Wait for shutdown
-wait "$pid" || true
+	rm -fr /tmp/init.sql
+	echo "MariaDB configuration bootstrap completed successfully..."
 
-echo "MariaDB configuration completed. Starting MariaDB..."
-exec mariadbd --user=mysql --datadir=/var/lib/mysql --socket=/run/mysqld/mysqld.sock
+else
+	echo "MariaDB storage directory already created. Skipping bootstrap."
+fi
+
+echo "Starting MariaDB engine..."
+exec mariadbd --user=mysql --datadir=${DB_DATADIR} --console
