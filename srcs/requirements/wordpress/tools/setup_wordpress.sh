@@ -12,8 +12,8 @@ WP_PATH=/var/www/html
 HASH_FILE=$WP_PATH/.config_hash
 
 HASH_CONFIG=$(printf '%s' "$DB_NAME" "$DB_USER" "$DB_PASSWORD" "$WP_USER" "$WP_PASSWORD" \
-	"$WP_ADMIN_USER" "$WP_ADMIN_PASSWORD" "$WP_PORT" "$DOMAIN_NAME" | sha256sum | \
-	cut -d ' ' -f1
+	"$WP_ADMIN_USER" "$WP_ADMIN_PASSWORD" "$WP_PORT" "$DOMAIN_NAME" "$REDIS_HOST" \
+	"$REDIS_PORT" | sha256sum | cut -d ' ' -f1
 )
 
 apply_wp_config () {
@@ -21,6 +21,10 @@ apply_wp_config () {
 	wp config set DB_USER "$DB_USER" --allow-root
 	wp config set DB_PASSWORD "$DB_PASSWORD" --allow-root
 	wp config set DB_HOST "mariadb:$DB_PORT" --allow-root
+	wp config set WP_REDIS_HOST "$REDIS_HOST" --allow-root
+	wp config set WP_REDIS_PORT "$REDIS_PORT" --allow-root
+	wp config set WP_REDIS_CLIENT predis --allow-root
+	wp redis enable --allow-root
 }
 
 echo "Checking MariaDB connection..."
@@ -61,6 +65,9 @@ if [ ! -f $WP_PATH/wp-config.php ]; then
 		--role=author \
 		--user_pass=$WP_PASSWORD \
 		--allow-root
+
+	echo "Installing and activating Redis plugin..."
+	wp plugin install redis-cache --activate --allow-root
 
 	apply_wp_config
 
