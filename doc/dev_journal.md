@@ -155,3 +155,8 @@ it uses the corresponding configuration.
 It defines the name of the virtual server.
 The first name is the primary server name
 
+## Redis
+Redis is single-threaded, when it needs to store data on disk, it forks a process.
+Kernel prevents redis to store data on disk to allow permition enter the command:
+`sudo sysctl vm.overcommit_memory=1` in the VM host machine
+
