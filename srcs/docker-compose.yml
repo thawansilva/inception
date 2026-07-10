@@ -87,8 +87,7 @@ services:
       - ftp_password
     ports:
       - "${FTP_PORT}:${FTP_PORT}"
-      - "${FTP_PASV_MIN_PORT}:${FTP_PASV_MIN_PORT}"
-      - "${FTP_PASV_MAX_PORT}:${FTP_PASV_MAX_PORT}"
+      - "${FTP_PASV_MIN_PORT}-${FTP_PASV_MAX_PORT}:${FTP_PASV_MIN_PORT}-${FTP_PASV_MAX_PORT}"
     environment:
       FTP_USER: ${FTP_USER}
       FTP_PORT: ${FTP_PORT}
