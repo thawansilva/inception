@@ -160,3 +160,8 @@ Redis is single-threaded, when it needs to store data on disk, it forks a proces
 Kernel prevents redis to store data on disk to allow permition enter the command:
 `sudo sysctl vm.overcommit_memory=1` in the VM host machine
 
+## FTP
+FTP (file transfer protocol) is a protocol used to transfer files between hosts
+in a network. It works in a client/server architecture, where there are two ports
+that is used one for commands (21) and other for transfer files (range of ports).
+
