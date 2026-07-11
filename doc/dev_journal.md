@@ -165,3 +165,6 @@ FTP (file transfer protocol) is a protocol used to transfer files between hosts
 in a network. It works in a client/server architecture, where there are two ports
 that is used one for commands (21) and other for transfer files (range of ports).
 
+## Static
+I am implementing my static website but I am facing some problems with reverse proxy
+from the main nginx to the static nginx, the problem was the way that I set the path of location
