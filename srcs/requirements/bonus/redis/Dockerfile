@@ -17,4 +17,4 @@ RUN chmod +x /usr/local/bin/setup_redis.sh
 
 EXPOSE 6379
 
-CMD ["/sbin/tini", "--", "/usr/local/bin/setup_redis.sh"]
+ENTRYPOINT ["/sbin/tini", "--", "/usr/local/bin/setup_redis.sh"]

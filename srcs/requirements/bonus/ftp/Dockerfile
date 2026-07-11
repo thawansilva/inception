@@ -14,4 +14,4 @@ RUN chmod +x /usr/local/bin/setup_ftp.sh
 
 EXPOSE 21 30000-30009
 
-CMD ["/sbin/tini", "--", "/usr/local/bin/setup_ftp.sh"]
+ENTRYPOINT ["/sbin/tini", "--", "/usr/local/bin/setup_ftp.sh"]
