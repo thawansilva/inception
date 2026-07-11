@@ -2,4 +2,6 @@
 
 set -e
 
-envsubst '' > /etc/nginx.conf.template
+envsubst '$STATIC_PORT' < /etc/nginx/nginx.conf.template > /etc/nginx/nginx.conf
+
+exec nginx -g "daemon off;"

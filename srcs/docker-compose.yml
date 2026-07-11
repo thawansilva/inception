@@ -60,6 +60,7 @@ services:
       DOMAIN_NAME: ${DOMAIN_NAME}
       WEB_PORT: ${WEB_PORT}
       WP_PORT: ${WP_PORT}
+      STATIC_PORT: ${STATIC_PORT}
     depends_on:
       - wordpress
     restart: on-failure
@@ -93,6 +94,16 @@ services:
       FTP_PORT: ${FTP_PORT}
       FTP_PASV_MIN_PORT: ${FTP_PASV_MIN_PORT}
       FTP_PASV_MAX_PORT: ${FTP_PASV_MAX_PORT}
+    restart: on-failure
+
+  static:
+    container_name: static_container
+    image: static:inception
+    build: ./requirements/bonus/static
+    networks:
+      - inception_network
+    environment:
+      STATIC_PORT: ${STATIC_PORT}
     restart: on-failure
 
 secrets:

@@ -8,6 +8,7 @@ LABEL org.opencontainers.image.title="Inception - Portfolio Website" \
 RUN apk update \
 	&& apk add --no-cache nginx tini gettext-envsubst
 
+COPY ./www /var/www/static
 COPY ./conf/nginx.conf /etc/nginx/nginx.conf.template
 COPY ./tools/setup_static.sh /usr/local/bin/
 
@@ -15,4 +16,4 @@ RUN chmod +x /usr/local/bin/setup_static.sh
 
 EXPOSE 8081
 
-CMD ["/sbin/tini", "--", "/usr/local/bin/setup_static.sh"]
+ENTRYPOINT ["/sbin/tini", "--", "/usr/local/bin/setup_static.sh"]
