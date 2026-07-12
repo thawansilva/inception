@@ -61,6 +61,7 @@ services:
       WEB_PORT: ${WEB_PORT}
       WP_PORT: ${WP_PORT}
       STATIC_PORT: ${STATIC_PORT}
+      ADMINER_PORT: ${ADMINER_PORT}
     depends_on:
       - wordpress
     restart: on-failure
@@ -104,6 +105,22 @@ services:
       - inception_network
     environment:
       STATIC_PORT: ${STATIC_PORT}
+    restart: on-failure
+
+  adminer:
+    container_name: adminer_container
+    image: adminer:inception
+    build: ./requirements/bonus/adminer
+    volumes:
+      - wordpress_data:/var/www/html
+    networks:
+      - inception_network
+    depends_on:
+      - mariadb
+      - wordpress
+    environment:
+      WP_PORT: ${WP_PORT}
+      ADMINER_PORT: ${ADMINER_PORT}
     restart: on-failure
 
 secrets:
