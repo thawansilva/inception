@@ -5,8 +5,7 @@ LABEL org.opencontainers.image.title="Inception - FTP" \
 	org.opencontainers.image.authors="thaperei@student.42sp.org.br" \
 	org.opencontainers.image.source="https://github.com/thawansilva/inception"
 
-RUN apk update \
-	&& apk add --no-cache vsftpd tini gettext-envsubst
+RUN apk update && apk add --no-cache vsftpd tini gettext-envsubst
 
 COPY ./conf/vsftpd.conf /etc/vsftpd/vsftpd.conf.template
 COPY ./tools/setup_ftp.sh /usr/local/bin/
