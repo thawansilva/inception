@@ -1,7 +1,7 @@
 #!/bin/sh
 set -e
 
-envsubst '$WEB_PORT $DOMAIN_NAME $WP_PORT $STATIC_PORT $ADMINER_PORT' < /etc/nginx/nginx.conf.template > /etc/nginx/nginx.conf
+envsubst '$WEB_PORT $DOMAIN_NAME $WP_PORT $STATIC_PORT $ADMINER_PORT $PORTAINER_PORT' < /etc/nginx/nginx.conf.template > /etc/nginx/nginx.conf
 
 if [ ! -f /etc/nginx/ssl/nginx.crt ]; then
 	echo "Generating self-signed SSL certificate for $DOMAIN_NAME"

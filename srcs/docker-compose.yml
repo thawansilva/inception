@@ -62,6 +62,7 @@ services:
       WP_PORT: ${WP_PORT}
       STATIC_PORT: ${STATIC_PORT}
       ADMINER_PORT: ${ADMINER_PORT}
+      PORTAINER_PORT: ${PORTAINER_PORT}
     depends_on:
       - wordpress
     restart: on-failure
@@ -123,6 +124,22 @@ services:
       ADMINER_PORT: ${ADMINER_PORT}
     restart: on-failure
 
+  portainer:
+    build: requirements/bonus/portainer
+    image: portainer:inception
+    container_name: portainer_container
+    restart: on-failure
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainer_data:/data
+    environment:
+      PORTAINER_USER: ${PORTAINER_USER}
+      PORTAINER_PORT: ${PORTAINER_PORT}
+    secrets:
+      - portainer_password
+    networks:
+      - inception_network
+
 secrets:
   credentials:
     file: ../secrets/credentials.txt
@@ -136,6 +153,8 @@ secrets:
     file: ../secrets/wp_admin_password.txt
   ftp_password:
     file: ../secrets/ftp_password.txt
+  portainer_password:
+    file: ../secrets/portainer_password.txt
 
 volumes:
   wordpress_data:
@@ -156,6 +175,12 @@ volumes:
       type: none
       o: bind
       device: ${VOLUME_REDIS} 
+  portainer_data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ${VOLUME_PORTAINER}
 
 networks:
   inception_network:
