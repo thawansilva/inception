@@ -4,13 +4,13 @@ set -e
 
 PORTAINER_PASSWORD=$(cat /run/secrets/portainer_password)
 
-/usr/local/bin/portainer --no-analytics \
+/usr/local/bin/portainer \
     -H unix:///var/run/docker.sock \
     --bind :${PORTAINER_PORT} &
 PORTAINER_PID=$!
 
 echo "Waiting for Portainer to start..."
-until wget -qO- http://localhost:${PORTAINER_PORT}/api/status > /dev/null 2>&1; do
+until wget -qO- http://localhost:${PORTAINER_PORT}/api/system/status > /dev/null 2>&1; do
     sleep 1
 done
 

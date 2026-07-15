@@ -5,7 +5,7 @@ LABEL org.opencontainers.image.title="Inception - Portainer" \
 	org.opencontainers.image.authors="thaperei@student.42sp.org.br" \
 	org.opencontainers.image.source="https://github.com/thawansilva/inception"
 
-RUN apk update && apk add --no-cache curl tini wget
+RUN apk update && apk add --no-cache curl tini wget jq
 
 RUN curl -Lo /tmp/portainer.tar.gz \
     https://github.com/portainer/portainer/releases/download/2.21.0/portainer-2.21.0-linux-amd64.tar.gz \
