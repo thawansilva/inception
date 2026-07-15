@@ -7,7 +7,7 @@ COMPOSE_FILE=srcs/docker-compose.yml
 all: up
 
 volumes:
-	mkdir -p $(VOLUME_MARIADB) $(VOLUME_WORDPRESS) $(VOLUME_REDIS)
+	mkdir -p $(VOLUME_MARIADB) $(VOLUME_WORDPRESS) $(VOLUME_REDIS) $(VOLUME_PORTAINER)
 
 up: volumes
 	docker compose -f $(COMPOSE_FILE) up -d
@@ -20,7 +20,7 @@ clean: down
 
 fclean: clean
 	docker image prune -a -f
-	sudo rm -fr $(VOLUME_MARIADB) $(VOLUME_WORDPRESS) $(VOLUME_REDIS)
+	sudo rm -fr $(VOLUME_MARIADB) $(VOLUME_WORDPRESS) $(VOLUME_REDIS) $(VOLUME_PORTAINER)
 
 re: fclean all
 
