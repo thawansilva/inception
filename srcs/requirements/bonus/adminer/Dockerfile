@@ -17,6 +17,6 @@ COPY ./tools/setup_adminer.sh /usr/local/bin/
 
 RUN chmod +x /usr/local/bin/setup_adminer.sh
 
-EXPOSE 9001
+EXPOSE 8080
 
 ENTRYPOINT ["/sbin/tini", "--", "/usr/local/bin/setup_adminer.sh"]
