@@ -11,6 +11,6 @@ COPY ./conf/vsftpd.conf /etc/vsftpd/vsftpd.conf.template
 COPY ./tools/setup_ftp.sh /usr/local/bin/
 RUN chmod +x /usr/local/bin/setup_ftp.sh
 
-EXPOSE 21 30000-30009
+EXPOSE 2121 30000-30009
 
 ENTRYPOINT ["/sbin/tini", "--", "/usr/local/bin/setup_ftp.sh"]
